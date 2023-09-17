@@ -15,7 +15,7 @@
 
 
 
-<title>箭头函数 | Xtyuerx</title>
+<title>节流函数 throttle | Xtyuerx</title>
 
 
 
@@ -42,45 +42,6 @@
 
     
     
-        
-            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    "HTML-CSS": {
-        preferredFont: "TeX",
-        availableFonts: ["STIX","TeX"],
-        linebreaks: { automatic:true },
-        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
-    },
-    tex2jax: {
-        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
-        processEscapes: true,
-        ignoreClass: "tex2jax_ignore|dno",
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    TeX: {
-        equationNumbers: { autoNumber: "AMS" },
-        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
-        Macros: { href: "{}" }
-    },
-    messageStyle: "none"
-    });
-</script>
-<!-- 给MathJax元素添加has-jax class -->
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-<!-- 通过连接CDN加载MathJax的js代码 -->
-<script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-
-
         
     
 
@@ -237,7 +198,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">箭头函数</h1>
+            <h1 class="post-title">节流函数 throttle</h1>
             
                 <div class="post-meta">
                     
@@ -246,14 +207,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">六月 11, 2020&nbsp;&nbsp;16:16:54</a>
+                        Date: <a href="#">五月 29, 2020&nbsp;&nbsp;10:32:47</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/es6/">es6</a>
+                                <a href="/categories/Tools/">Tools</a>
                             
                         </span>
                     
@@ -262,38 +223,26 @@
         </header>
 
         <div class="post-content">
-            <h2 id="箭头函数的基本语法"><a href="#箭头函数的基本语法" class="headerlink" title="箭头函数的基本语法"></a>箭头函数的基本语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let func &#x3D; value &#x3D;&gt; value;</span><br></pre></td></tr></table></figure>
-
-<p>相当于：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let func &#x3D; function (value) &#123;</span><br><span class="line">    return value;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>如果需要给函数传入多个参数：</p>
+            <h1 id="实现节流函数（throttle）"><a href="#实现节流函数（throttle）" class="headerlink" title="实现节流函数（throttle）"></a>实现节流函数（throttle）</h1><blockquote>
+<p>节流函数原理:指频繁触发事件时，只会在指定的时间段内执行事件回调，即触发事件间隔大于等于指定的时间才会执行回调函数。总结起来就是：事件，按照一段时间的间隔来进行触发。<br>像dom的拖拽，如果用消抖的话，就会出现卡顿的感觉，因为只在停止的时候执行了一次，这个时候就应该用节流，在一定时间内多次执行，会流畅很多</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let func &#x3D; (value, num) &#x3D;&gt; value * num;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>如果函数的代码块需要多条语句：</p>
+<h2 id="手写简版"><a href="#手写简版" class="headerlink" title="手写简版"></a>手写简版</h2><blockquote>
+<p>使用时间戳的节流函数会在第一次触发事件时立即执行，以后每过 wait 秒之后才执行一次，并且最后一次触发事件不会被执行</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let func &#x3D; (value, num) &#x3D;&gt; &#123;</span><br><span class="line">    return value * num</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>如果需要直接返回一个对象：</p>
+<h3 id="时间戳方式"><a href="#时间戳方式" class="headerlink" title="时间戳方式"></a>时间戳方式</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// func是用户传入需要防抖的函数</span></span><br><span class="line"><span class="comment">// wait是等待时间</span></span><br><span class="line"><span class="keyword">const</span> throttle = <span class="function">(<span class="params">func, wait = <span class="number">50</span></span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 上一次执行该函数的时间</span></span><br><span class="line">  <span class="keyword">let</span> lastTime = <span class="number">0</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">...args</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 当前时间</span></span><br><span class="line">    <span class="keyword">let</span> now = +<span class="keyword">new</span> <span class="built_in">Date</span>()</span><br><span class="line">    <span class="comment">// 将当前时间和上一次执行函数时间对比</span></span><br><span class="line">    <span class="comment">// 如果差值大于设置的等待时间就执行函数</span></span><br><span class="line">    <span class="keyword">if</span> (now - lastTime &gt; wait) &#123;</span><br><span class="line">      lastTime = now</span><br><span class="line">      func.apply(<span class="keyword">this</span>, args)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">setInterval(</span><br><span class="line">  throttle(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>)</span><br><span class="line">  &#125;, <span class="number">500</span>),</span><br><span class="line">  <span class="number">1</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="定时器方式"><a href="#定时器方式" class="headerlink" title="定时器方式"></a>定时器方式</h3><blockquote>
+<p>使用定时器的节流函数在第一次触发时不会执行，而是在 delay 秒之后才执行，当最后一次停止触发后，还会再执行一次函数</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let func &#x3D; (value, num) &#x3D;&gt; (&#123;total: value * num&#125;);</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>与变量解构结合：</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">let func &#x3D; (&#123;value, num&#125;) &#x3D;&gt; (&#123;total: value * num&#125;)</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 使用</span><br><span class="line">var result &#x3D; func(&#123;</span><br><span class="line">    value: 10,</span><br><span class="line">    num: 10</span><br><span class="line">&#125;)</span><br><span class="line">console.log(result); &#x2F;&#x2F; &#123;total: 100&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h2><ul>
-<li>箭头函数不绑定 arguments，可以使用 …args 代替</li>
-<li>箭头函数没有 prototype 属性，不能进行 new 实例化</li>
-<li>箭头函数不能通过 call、apply 等绑定 this，因为它在声明的时候this就被绑定了，无法被修改</li>
-<li>箭头函数的this是在声明时确定的。箭头函数的this取决于其包含它的上下文中的this，并不是在运行时动态确定的</li>
-<li>箭头函数不能使用yield关键字，不能作为Generator函数</li>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">throttle</span>(<span class="params">func, delay</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> timer = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> context = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">var</span> args = <span class="built_in">arguments</span>;</span><br><span class="line">    <span class="keyword">if</span>(timer) <span class="keyword">return</span> <span class="comment">// 当前有任务了，直接返回</span></span><br><span class="line">    timer = setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      func.apply(context, args);</span><br><span class="line">      timer = <span class="number">0</span>;</span><br><span class="line">    &#125;,delay);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h2><ul>
+<li>拖拽场景：固定时间内只执行一次，防止超高频次触发位置变动。DOM 元素的拖拽功能实现（mousemove）</li>
+<li>缩放场景：监控浏览器resize</li>
+<li>滚动场景：监听滚动scroll事件判断是否到页面底部自动加载更多</li>
+<li>动画场景：避免短时间内多次触发动画引起性能问题</li>
 </ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><blockquote>
+<p>限制执行的频率，按照一定的时间间隔有节奏的执行<br>使得一定时间内只触发一次函数。原理是通过判断是否到达一定时间来触发函数。</p>
+</blockquote>
 
         </div>
 
@@ -319,7 +268,7 @@
                     
                         <a href="/tags/%E5%89%8D%E7%AB%AF/"># 前端</a>
                     
-                        <a href="/tags/es6/"># es6</a>
+                        <a href="/tags/IT%E6%8A%80%E6%9C%AF/"># IT技术</a>
                     
                         
                 </span>
@@ -332,10 +281,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/es6/class/">class</a>
+                <a class="prev" rel="prev" href="/es6/arrow/">箭头函数</a>
             
             
-            <a class="next" rel="next" href="/Tools/throttle/">节流函数 throttle</a>
+            <a class="next" rel="next" href="/Tools/debounce/">防抖函数 debounce</a>
             
         </section>
 

@@ -2,6 +2,48 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/about/index.html</loc>
+    
+    <lastmod>2023-09-17T03:52:06.758Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/Tools/throttle/</loc>
+    
+    <lastmod>2023-09-17T03:40:47.863Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/Tools/debounce/</loc>
+    
+    <lastmod>2023-09-17T03:39:58.838Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/Javascript/javascript/</loc>
+    
+    <lastmod>2023-09-17T03:26:13.577Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/es6/arrow/</loc>
+    
+    <lastmod>2023-09-17T03:24:36.273Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/es6/class/</loc>
+    
+    <lastmod>2023-08-27T13:57:02.303Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/tag/index.html</loc>
     
     <lastmod>2023-08-27T13:46:58.672Z</lastmod>
@@ -12,83 +54,6 @@
     <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/category/index.html</loc>
     
     <lastmod>2023-08-27T13:45:43.509Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/es6/arrow/</loc>
-    
-    <lastmod>2023-08-27T13:45:30.634Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/about/index.html</loc>
-    
-    <lastmod>2023-08-27T09:25:00.088Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/cate/throttle/</loc>
-    
-    <lastmod>2023-08-27T09:25:00.087Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/es6/promise/</loc>
-    
-    <lastmod>2023-08-27T09:25:00.086Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/uncategorized/mapSet/</loc>
-    
-    <lastmod>2023-08-27T09:25:00.086Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/es6/symbol/</loc>
-    
-    <lastmod>2023-08-27T09:25:00.086Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/es6/statement/</loc>
-    
-    <lastmod>2023-08-27T09:25:00.086Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/es6/deconstruction/</loc>
-    
-    <lastmod>2023-08-27T09:25:00.085Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/es6/initEs6/</loc>
-    
-    <lastmod>2023-08-27T09:25:00.085Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/es6/class/</loc>
-    
-    <lastmod>2023-08-27T09:25:00.084Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://github.com/yanZhangX/yanZhangX.github.io.git/cate/debounce/</loc>
-    
-    <lastmod>2023-08-27T09:25:00.084Z</lastmod>
     
   </url>
   
