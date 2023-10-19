@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Xtyuerx">
+
+
+    <meta name="subtitle" content="格物致知">
+
+
+
+
+<title>hexo | Xtyuerx`s blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Xtyuerx&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Xtyuerx&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">hexo</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Xtyuerx</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">十月 18, 2023&nbsp;&nbsp;21:29:37</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="认识-Hexo"><a href="#认识-Hexo" class="headerlink" title="认识 Hexo"></a>认识 Hexo</h1><blockquote>
+<p> Hexo 是一个快速、简洁且高效的博客框架，可以让你快速建立一个博客。</p>
+</blockquote>
+<h2 id="快速"><a href="#快速" class="headerlink" title="快速"></a>快速</h2><p>Hexo 使用 Node.js 编写。得益于 Node.js，使得 Hexo 生成上百个页面游刃有余。</p>
+<h2 id="支持-Markdown"><a href="#支持-Markdown" class="headerlink" title="支持 Markdown"></a>支持 Markdown</h2><p>Hexo 支持 GFM (GitHub Flavored Markdown) 的大部分功能。</p>
+<h2 id="部署方便"><a href="#部署方便" class="headerlink" title="部署方便"></a>部署方便</h2><p>只需要一条指令就可以部署到 GitHub Pages、Heroku、Coding Pages 等其他网站。</p>
+<h2 id="插件丰富"><a href="#插件丰富" class="headerlink" title="插件丰富"></a>插件丰富</h2><p>Hexo 有许多插件，可以进行各种操作。</p>
+<h2 id="学习-Hexo-之前，你需要有"><a href="#学习-Hexo-之前，你需要有" class="headerlink" title="学习 Hexo 之前，你需要有"></a>学习 Hexo 之前，你需要有</h2><ul>
+<li><del>Node.js 基本知识</del></li>
+<li><del>Git 基本知识</del></li>
+<li><a href="https://markdown.com.cn/" target="_blank" rel="noopener">Markdown 基本知识</a></li>
+<li><del>Html、css、JavaScript 基本知识</del></li>
+<li>······</li>
+</ul>
+<p>除了 Markdown ，其他都不用熟练掌握（事实上如果你不注意排版连 Markdown 都不用掌握）。如果你完全不会以上划线部分的知识，也没关系。只是简单地建个可以发文章的博客就好了。如果你要更上一层楼，那么以上<del>被划掉</del>的知识就是必备的啦~</p>
+<h1 id="安装-Hexo"><a href="#安装-Hexo" class="headerlink" title="安装 Hexo"></a>安装 Hexo</h1><p>在安装 Hexo 之前，你需要安装以下两个工具：</p>
+<ul>
+<li><a href="https://git-scm.com/" target="_blank" rel="noopener">Git</a></li>
+<li><a href="https://nodejs.org/" target="_blank" rel="noopener">Node.js</a></li>
+</ul>
+<p>如果您已经安装好以上两个工具，可以直接跳转至 <a href="/1-Hexo-install-and-config/1-2-install-hexo.html#安装-hexo-2">安装 Hexo</a>。</p>
+<h2 id="安装-Git"><a href="#安装-Git" class="headerlink" title="安装 Git"></a>安装 Git</h2><ul>
+<li>Windows：下载并安装 <a href="https://git-scm.com/download/win" target="_blank" rel="noopener">git</a>.</li>
+<li>Mac：使用 <a href="http://mxcl.github.com/homebrew/" target="_blank" rel="noopener">Homebrew</a>, <a href="http://www.macports.org/" target="_blank" rel="noopener">MacPorts</a> ：<code>brew install git</code>;或下载 <a href="http://sourceforge.net/projects/git-osx-installer/" target="_blank" rel="noopener">安装程序</a> 安装。</li>
+<li>Linux (Ubuntu, Debian)：<code>sudo apt-get install git-core</code></li>
+<li>Linux (Fedora, Red Hat, CentOS)：<code>sudo yum install git-core</code></li>
+<li>Linux (Arch 系列)：<code>sudo pacman -S git</code></li>
+</ul>
+<blockquote>
+<p>由于墙的原因，从上面的链接下载 git for windows 最好挂上一个代理，否则下载速度十分缓慢。也可以参考<a href="https://github.com/waylau/git-for-win">这个页面</a>，收录了存储于百度云的下载地址。</p>
+</blockquote>
+<blockquote>
+<p>如果你是 CentOS 服务器上的，可以直接使用 <a href="https://github.com/PasserByJia/HexoOneClickInstallation">HexoOneClickInstallation</a> 这个脚本快速安装 Hexo。</p>
+</blockquote>
+<h2 id="安装-Node-js"><a href="#安装-Node-js" class="headerlink" title="安装 Node.js"></a>安装 Node.js</h2><p>安装 Node.js</p>
+<ul>
+<li><a href="https://nodejs.org" target="_blank" rel="noopener">官网</a>下载安装</li>
+<li>使用 <a href="https://github.com/creationix/nvm">nvm</a>下载安装</li>
+</ul>
+<p>安装完成后，重启终端并执行下列命令即可安装 Node.js。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nvm install stable</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在中国大陆由于某些众所周知的网络原因，推荐使用<a href="https://developer.aliyun.com/mirror/NPM" target="_blank" rel="noopener">淘宝 NPM 镜像</a></p>
+</blockquote>
+<figure class="highlight shell"><figcaption><span>script</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g cnpm --registry=https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>cnpm install</code> 来代替所有 <code>npm install</code> 指令。</p>
+<h2 id="安装-Hexo-1"><a href="#安装-Hexo-1" class="headerlink" title="安装 Hexo"></a>安装 Hexo</h2><p>安装好后，即可使用 npm 完成 Hexo 的安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<h1 id="配置-Hexo"><a href="#配置-Hexo" class="headerlink" title="配置 Hexo  "></a>配置 Hexo <Badge text="ChungZH"/> <Badge text="Finish"/></h1><h2 id="建立网站"><a href="#建立网站" class="headerlink" title="建立网站"></a>建立网站</h2><p>安装好 Hexo 后即可建立你的博客项目。</p>
+<p>首先建立一个文件夹。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir &lt;your_blog_name&gt;  <span class="comment"># 建立你的博客项目根目录，名字可以自己修改</span></span><br></pre></td></tr></table></figure>
+
+<p>然后往这个文件夹里安装 Hexo。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init &lt;your_blog_name&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这样就建立好项目了！</p>
+<h2 id="配置-Hexo-1"><a href="#配置-Hexo-1" class="headerlink" title="配置 Hexo"></a>配置 Hexo</h2><blockquote>
+<p>[!WARNING]此部分内容可能过期，请见 <a href="https://hexo.io/zh-cn/docs/configuration" target="_blank" rel="noopener">Hexo 官方文档</a>。</p>
+</blockquote>
+<p>没错，就是在 Hexo 根目录 <code>_config.yml</code> 这个文件里配置！</p>
+<blockquote>
+<p>在 YAML 语法中，冒号后面必须要有一个空格才能继续写下去。</p>
+</blockquote>
+<h3 id="网站"><a href="#网站" class="headerlink" title="网站"></a>网站</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Site</span></span><br><span class="line"><span class="attr">title:</span></span><br><span class="line"><span class="attr">subtitle:</span></span><br><span class="line"><span class="attr">description:</span></span><br><span class="line"><span class="attr">keywords:</span></span><br><span class="line"><span class="attr">author:</span></span><br><span class="line"><span class="attr">language:</span></span><br><span class="line"><span class="attr">timezone:</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>title</code></td>
+<td>网站标题</td>
+</tr>
+<tr>
+<td><code>subtitle</code></td>
+<td>网站副标题</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>网站描述</td>
+</tr>
+<tr>
+<td><code>keywords</code></td>
+<td>网站关键词</td>
+</tr>
+<tr>
+<td><code>author</code></td>
+<td>作者名字</td>
+</tr>
+<tr>
+<td><code>language</code></td>
+<td>网站使用的语言</td>
+</tr>
+<tr>
+<td><code>timezone</code></td>
+<td>网站时区：详见<a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank" rel="noopener">时区列表</a></td>
+</tr>
+</tbody></table>
+<h3 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># URL</span></span><br><span class="line"><span class="comment">## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'</span></span><br><span class="line"><span class="attr">url:</span></span><br><span class="line"><span class="attr">root:</span></span><br><span class="line"><span class="attr">permalink:</span> <span class="string">:year/:month/:day/:title/</span></span><br><span class="line"><span class="attr">permalink_defaults:</span></span><br><span class="line"><span class="attr">pretty_urls:</span></span><br><span class="line">  <span class="attr">trailiing_index:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>url</code></td>
+<td>网址</td>
+</tr>
+<tr>
+<td><code>root</code></td>
+<td>网站根目录</td>
+</tr>
+<tr>
+<td><code>permalink</code></td>
+<td>文章的永久链接格式</td>
+</tr>
+<tr>
+<td><code>permalink_defaults</code></td>
+<td>永久链接中各部分的默认值</td>
+</tr>
+<tr>
+<td><code>pretty_urls</code></td>
+<td>改写 <code>permalink</code> 的值来美化 URL</td>
+</tr>
+<tr>
+<td><code>pretty_urls.trailing_index</code></td>
+<td>是否在永久链接中保留尾部的 <code>index.html</code>，<code>false</code> 时去除</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>如果你的网站在子目录中，如：<code>https://yoursite.com/blog</code> ，就把你的 <code>url</code> 设为 <code>http://yoursite.com/blog</code> 并把 <code>root</code> 设为 <code>/blog/</code>。</p>
+</blockquote>
+<p>例如：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 比如，一个页面的永久链接是 http://example.com/foo/bar/index.html</span></span><br><span class="line"><span class="attr">pretty_urls:</span></span><br><span class="line">  <span class="attr">trailing_index:</span> <span class="literal">false</span></span><br><span class="line"><span class="comment"># 此时页面的永久链接会变为 http://example.com/foo/bar/</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Directory</span></span><br><span class="line"><span class="attr">source_dir:</span> <span class="string">source</span></span><br><span class="line"><span class="attr">public_dir:</span> <span class="string">public</span></span><br><span class="line"><span class="attr">tag_dir:</span> <span class="string">tags</span></span><br><span class="line"><span class="attr">archive_dir:</span> <span class="string">archives</span></span><br><span class="line"><span class="attr">category_dir:</span> <span class="string">categories</span></span><br><span class="line"><span class="attr">code_dir:</span> <span class="string">downloads/code</span></span><br><span class="line"><span class="attr">i18n_dir:</span> <span class="string">:lang</span></span><br><span class="line"><span class="attr">skip_render:</span> <span class="string">README.md</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>source_dir</code></td>
+<td>资源文件夹</td>
+</tr>
+<tr>
+<td><code>public_dir</code></td>
+<td>公共文件夹</td>
+</tr>
+<tr>
+<td><code>tag_dir</code></td>
+<td>标签文件夹</td>
+</tr>
+<tr>
+<td><code>archive_dir</code></td>
+<td>归档文件夹</td>
+</tr>
+<tr>
+<td><code>category_dir</code></td>
+<td>分类文件夹</td>
+</tr>
+<tr>
+<td><code>code_dir</code></td>
+<td>Include code 文件夹</td>
+</tr>
+<tr>
+<td><code>i18n_dir</code></td>
+<td>国际化文件夹</td>
+</tr>
+<tr>
+<td><code>skip_render</code></td>
+<td>跳过文件的渲染。匹配到的文件将直接复制到 <code>public</code> 目录中。您可使用 <a href="https://github.com/micromatch/micromatch#extended-globbing">glob</a> 表达式来匹配路径。</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>一般情况下，这部分是不需要修改的。</p>
+</blockquote>
+<p>例如：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">skip_render:</span> <span class="string">"mypage/**/*"</span></span><br><span class="line"><span class="comment"># 将会直接将 `source/mypage/index.html` 和 `source/mypage/code.js` 不做改动地输出到 'public' 目录</span></span><br><span class="line"><span class="comment"># 你也可以用这种方法来跳过对指定文章文件的渲染</span></span><br><span class="line"><span class="attr">skip_render:</span> <span class="string">"_posts/test-post.md"</span></span><br><span class="line"><span class="comment"># 这将会忽略对 'test-post.md' 的渲染</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Writing</span></span><br><span class="line"><span class="attr">new_post_name:</span> <span class="string">:title.md</span> <span class="comment"># File name of new posts</span></span><br><span class="line"><span class="attr">default_layout:</span> <span class="string">post</span></span><br><span class="line"><span class="attr">auto_spacing:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">titlecase:</span> <span class="literal">false</span> <span class="comment"># Transform title into titlecase</span></span><br><span class="line"><span class="attr">external_link:</span> <span class="literal">true</span> <span class="comment"># Open external links in new tab</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">field:</span> <span class="string">site</span></span><br><span class="line">  <span class="attr">exclude:</span> <span class="string">[]</span></span><br><span class="line"><span class="attr">filename_case:</span> <span class="number">0</span></span><br><span class="line"><span class="attr">render_drafts:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">relative_link:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">future:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">highlight:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">line_number:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">auto_detect:</span> <span class="literal">false</span></span><br><span class="line">  <span class="attr">tab_replace:</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>new_post_name</code></td>
+<td>新文章的文件名称</td>
+</tr>
+<tr>
+<td><code>default_layout</code></td>
+<td>预设布局</td>
+</tr>
+<tr>
+<td><code>auto_spacing</code></td>
+<td>在中文和英文之间加入空格</td>
+</tr>
+<tr>
+<td><code>titlecase</code></td>
+<td>把标题转换为 title case</td>
+</tr>
+<tr>
+<td><code>external_link</code></td>
+<td>在新标签中打开链接</td>
+</tr>
+<tr>
+<td><code>external_link.enable</code></td>
+<td>在新标签中打开链接</td>
+</tr>
+<tr>
+<td><code>external_link.field</code></td>
+<td>适用于整个网站或仅文章</td>
+</tr>
+<tr>
+<td><code>external_link.exclude</code></td>
+<td>排除主机名。在适用时指定子域，包括 <code>www</code></td>
+</tr>
+<tr>
+<td><code>filename_case</code></td>
+<td>把文件名称转换为 (1) 小写或 (2) 大写</td>
+</tr>
+<tr>
+<td><code>render_drafts</code></td>
+<td>显示草稿</td>
+</tr>
+<tr>
+<td><code>post_asset_folder</code></td>
+<td>启动 <a href="https://hexo.io/zh-cn/docs/asset-folders" target="_blank" rel="noopener">Asset 文件夹</a></td>
+</tr>
+<tr>
+<td><code>relative_link</code></td>
+<td>把链接改为与根目录的相对位址</td>
+</tr>
+<tr>
+<td><code>future</code></td>
+<td>显示未来的文章</td>
+</tr>
+<tr>
+<td><code>highlight</code></td>
+<td>代码块的设置</td>
+</tr>
+<tr>
+<td><code>highlight.enable</code></td>
+<td>开启语法高亮</td>
+</tr>
+<tr>
+<td><code>highlight.auto_detect</code></td>
+<td>如果未指定语言，则启用自动检测</td>
+</tr>
+<tr>
+<td><code>highlight.line_number</code></td>
+<td>显示行数</td>
+</tr>
+<tr>
+<td><code>highlight.tab_replace</code></td>
+<td>用 n 个空格替换 tabs；如果值为空，则不会替换 tabs</td>
+</tr>
+</tbody></table>
+<h3 id="分类-amp-标签"><a href="#分类-amp-标签" class="headerlink" title="分类 &amp; 标签"></a>分类 &amp; 标签</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Category &amp; Tag</span></span><br><span class="line"><span class="attr">default_category:</span> <span class="string">uncategorized</span></span><br><span class="line"><span class="attr">category_map:</span></span><br><span class="line"><span class="attr">tag_map:</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>default_category</code></td>
+<td>默认分类</td>
+</tr>
+<tr>
+<td><code>category_map</code></td>
+<td>分类别名</td>
+</tr>
+<tr>
+<td><code>tag_map</code></td>
+<td>标签别名</td>
+</tr>
+</tbody></table>
+<h3 id="日期-时间格式"><a href="#日期-时间格式" class="headerlink" title="日期 / 时间格式"></a>日期 / 时间格式</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Date / Time format</span></span><br><span class="line"><span class="comment">## Hexo uses Moment.js to parse and display date</span></span><br><span class="line"><span class="comment">## You can customize the date format as defined in</span></span><br><span class="line"><span class="comment">## http://momentjs.com/docs/#/displaying/format/</span></span><br><span class="line"><span class="attr">date_format:</span> <span class="string">YYYY-MM-DD</span></span><br><span class="line"><span class="attr">time_format:</span> <span class="string">HH:mm:ss</span></span><br><span class="line"><span class="attr">use_date_for_updated:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>date_format</code></td>
+<td>日期格式</td>
+</tr>
+<tr>
+<td><code>time_format</code></td>
+<td>时间格式</td>
+</tr>
+<tr>
+<td><code>use_date_for_updated</code></td>
+<td>如果前面没有提供更新日期，则使用 <code>post.updated</code> 中的发布日期。通常与 Git 工作流一起使用。</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Hexo 使用 <a href="http://momentjs.com/" target="_blank" rel="noopener">Moment.js</a> 来解析和显示时间。</p>
+</blockquote>
+<h2 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h2><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Pagination</span></span><br><span class="line"><span class="comment">## Set per_page to 0 to disable pagination</span></span><br><span class="line"><span class="attr">per_page:</span> <span class="number">10</span></span><br><span class="line"><span class="attr">pagination_dir:</span> <span class="string">page</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>per_page</code></td>
+<td>每页显示的文章量 (0 = 关闭分页功能)</td>
+</tr>
+<tr>
+<td><code>pagination_dir</code></td>
+<td>分页目录</td>
+</tr>
+</tbody></table>
+<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Extensions</span></span><br><span class="line"><span class="comment">## Plugins: https://hexo.io/plugins/</span></span><br><span class="line"><span class="comment">## Themes: https://hexo.io/themes/</span></span><br><span class="line"><span class="attr">theme:</span></span><br><span class="line"><span class="attr">theme_config:</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line"><span class="attr">meta_generator:</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>theme</code></td>
+<td>当前主题名称。值为 <code>false</code> 时禁用主题</td>
+</tr>
+<tr>
+<td><code>theme_config</code></td>
+<td>主题的配置文件。在这里放置的配置会覆盖主题目录下的 <code>_config.yml</code> 中的配置。</td>
+</tr>
+<tr>
+<td><code>deploy</code></td>
+<td>部署的设置</td>
+</tr>
+<tr>
+<td><code>meta_generator</code></td>
+<td><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/meta#%E5%B1%9E%E6%80%A7" target="_blank" rel="noopener">Meta generator</a> 标签。 值为 <code>false</code> 时 Hexo 不会在头部插入该标签。</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>下一篇文章将会提到 部署。</p>
+</blockquote>
+<h2 id="Hexo-命令详解"><a href="#Hexo-命令详解" class="headerlink" title="Hexo 命令详解"></a>Hexo 命令详解</h2><p>下面介绍一些 Hexo 的基本命令。</p>
+<h3 id="hexo-init-folder"><a href="#hexo-init-folder" class="headerlink" title="hexo init [folder]"></a><code>hexo init [folder]</code></h3><p>这个命令是 Hexo 初始化命令。<code>[folder]</code> 表示你要初始化的文件夹。如果你要初始化本地，直接 <code>hexo init .</code> 。</p>
+<h3 id="hexo-new-layout-lt-title-gt"><a href="#hexo-new-layout-lt-title-gt" class="headerlink" title="hexo new [layout] &lt;title&gt;"></a><code>hexo new [layout] &lt;title&gt;</code></h3><p>这个命令是新建文章或页面用的命令。其中 <code>[layout]</code> 表示他的模板（即页面或者文章），<code>&lt;title&gt;</code> 表示标题。</p>
+<p>用法：</p>
+<ol>
+<li><code>hexo new post 001</code> ，表示新建了一个标题为 <code>001</code> 的文章。</li>
+<li><code>hexo new page 001</code> ，表示新建了一个标题为 <code>001</code> 的页面。</li>
+</ol>
+<p>如果你不想在终端中新建文章或页面，可以直接在 <code>博客根目录/source/_post/</code> 目录下创建 Markdown 文件写<strong>文章</strong>。或者在 <code>博客根目录/source/</code> 目录下创建一个文件夹，然后在新文件夹里创建 <code>index.md</code> 写<strong>页面</strong>即可。</p>
+<blockquote>
+<p>当你新建页面后，页面的链接就是你页面所在的文件夹的名字。<br>例如：我在 <code>博客根目录/source/</code> 下新建了一个名为 <code>test</code> 的文件夹，然后在 <code>test</code> 文件夹下写 Markdown 文件，那么这个页面的链接就是 <code>网址/test</code>。</p>
+</blockquote>
+<h3 id="hexo-server"><a href="#hexo-server" class="headerlink" title="hexo server"></a><code>hexo server</code></h3><p>当你要在本地查看网站的时候，就可以用这个命令。</p>
+<p>默认在 <code>http://localhost:8080/</code> 这里，可能会不同，注意提示信息即可。</p>
+<p>:::tip 提醒</p>
+<p>如果你想要换端口号（上面的 <code>8080</code> 就是端口号），可以在终端里输入 <code>hexo s -p 端口号</code>。</p>
+<p>:::</p>
+<h3 id="hexo-generate"><a href="#hexo-generate" class="headerlink" title="hexo generate"></a><code>hexo generate</code></h3><p>这个命令是生成网站静态文件的时候用的，生成后网页将会放在根目录下面的 <code>public</code> 文件夹里。</p>
+<h3 id="hexo-deploy"><a href="#hexo-deploy" class="headerlink" title="hexo deploy"></a><code>hexo deploy</code></h3><p>这个命令用来部署网站，使用此命令将会把生成好的页面（即 <code>public</code> 文件夹里的内容）部署到指定的地方上。</p>
+<h3 id="hexo-clean"><a href="#hexo-clean" class="headerlink" title="hexo clean"></a><code>hexo clean</code></h3><p>这个命令用来清空 <code>public</code> 文件夹。</p>
+<h3 id="hexo-version"><a href="#hexo-version" class="headerlink" title="hexo version"></a><code>hexo version</code></h3><p>这个命令用来输出你所使用的 Hexo 目前的版本号。</p>
+<h1 id="部署-Hexo"><a href="#部署-Hexo" class="headerlink" title="部署 Hexo    "></a>部署 Hexo <Badge text="@MoshiYeap"/> <Badge text="@Odeinjul"/> <Badge text="@ChungZH"/> <Badge text="Finish"/></h1><h2 id="部署到-GitHub"><a href="#部署到-GitHub" class="headerlink" title="部署到 GitHub"></a>部署到 GitHub</h2><h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><ol>
+<li>如果没有账号，请点此前往 <a href="https://github.com">GitHub</a> 注册一个 GitHub 账号。</li>
+<li>新建一个公开仓库，仓库名格式为 <code>your_username.github.io</code> 例如你的 GitHub 用户名是 <code>easyhexo</code>，那么你的仓库地址名称就应该是 <code>easyhexo.github.io</code></li>
+<li>创建完成后记下该仓库的 HTTPS/SSH 地址，一般格式为 <code>https://github.com/your_username/your_reponame.git</code> 在下一步会用到。</li>
+</ol>
+<h3 id="安装部署插件"><a href="#安装部署插件" class="headerlink" title="安装部署插件"></a>安装<a href="https://github.com/hexojs/hexo-deployer-git">部署插件</a></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br><span class="line">$ npm install hexo-server --save</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置-Git"><a href="#配置-Git" class="headerlink" title="配置 Git"></a>配置 Git</h3><p>如果你只是安装好了 Git 但没有配置过你的 Git ，那么现在需要做的第一件事情就是设置你的 Git 用户名和邮箱。<br>在 Git Bash 中执行以下两条命令配置你的用户名和邮箱，这里建议用户名和邮箱与你的 GitHub 用户名和邮箱保持一致。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">"Your_user_name"</span></span><br><span class="line">$ git config --global user.email Your_email@example.com</span><br></pre></td></tr></table></figure>
+
+<p>:::tip 提醒<br>每次 Git 提交时都会附带这两条信息，用于记录是谁提交的更新，并且会随更新内容一起被记录到历史记录中。简单说，是用来标记的你的身份的~<br>:::</p>
+<h3 id="配置站点-config-yml-文件"><a href="#配置站点-config-yml-文件" class="headerlink" title="配置站点 _config.yml 文件"></a>配置站点 <code>_config.yml</code> 文件</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span> <span class="comment"># 类型填git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">&lt;repository</span> <span class="string">url&gt;</span> <span class="comment"># 你的Github仓库地址</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span> <span class="comment"># 分支名称。默认填写 master 如果您使用的是 GitHub ，程序会尝试自动检测。</span></span><br><span class="line">  <span class="attr">message:</span> <span class="comment"># 提交信息可以自定义，不填的则默认为提交时间</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="发布到-GitHub"><a href="#发布到-GitHub" class="headerlink" title="发布到 GitHub"></a>发布到 GitHub</h3><p>在本地的 Hexo 站点根目录下，执行如下命令即可部署到 GitHub Pages 上。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean &amp;&amp; hexo d -g</span><br></pre></td></tr></table></figure>
+
+<p>!!! warning 提醒<br>如果是第一次使用，会弹出一个登录框，需要登录你的 GitHub 账号。</p>
+<h3 id="自定义域名"><a href="#自定义域名" class="headerlink" title="自定义域名"></a>自定义域名</h3><ol>
+<li>如果你拥有个人域名，请用 A 记录解析到以下 IP 中的任意一个。如果使用 CNAME 请解析到你的 GitHub 仓库名称。</li>
+</ol>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">185.199</span><span class="number">.108</span><span class="number">.153</span></span><br><span class="line"><span class="number">185.199</span><span class="number">.109</span><span class="number">.153</span></span><br><span class="line"><span class="number">185.199</span><span class="number">.110</span><span class="number">.153</span></span><br><span class="line"><span class="number">185.199</span><span class="number">.111</span><span class="number">.153</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>参考表格</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">记录类型</th>
+<th align="center">主机记录</th>
+<th align="center">解析路线</th>
+<th align="center">记录值</th>
+<th align="center">MAX 优先级</th>
+<th align="center">TTL（秒）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">A</td>
+<td align="center">@</td>
+<td align="center">默认</td>
+<td align="center">185.199.110.153</td>
+<td align="center">-</td>
+<td align="center">600</td>
+</tr>
+<tr>
+<td align="center">CNAME</td>
+<td align="center">@</td>
+<td align="center">默认</td>
+<td align="center">GitHub 博客仓库名称</td>
+<td align="center">-</td>
+<td align="center">600</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li>打开仓库设置,找到 GitHub Pages 项目，修改 Custom domain 选项的值为你的自定义域名（不带 http 等前缀）</li>
+<li>勾选 Custom domain 选项下的 Enforce HTTPS 选项，强制开启 Https 。如果遇到 <code>Enforce HTTPS</code> 选项无法打开，可以稍等一会儿再尝试。</li>
+</ol>
+<blockquote>
+<p>同时需要在本地的 <code>source</code> 目录新建一个 CNAME 文件，内容为你的自定义域名（不带 http 等前缀）。否则无法使用自定义域名功能（<code>hexo d</code> 生成的文件没有 CNAME 文件，导致仓库的自定域名设置失效）</p>
+</blockquote>
+<h2 id="部署到-Netlify"><a href="#部署到-Netlify" class="headerlink" title="部署到 Netlify"></a>部署到 Netlify</h2><p>Netlify 是一个可以部署静态网站的平台，也可以从 GitHub/GitLab/Bitbucket 的项目中快速构建你的网站。相比 GitHub Pages 更加专业、便捷，即使在国内的访问速度也不错，百度也能收录。</p>
+<h3 id="准备工作-1"><a href="#准备工作-1" class="headerlink" title="准备工作"></a>准备工作</h3><p>:::tip 提醒<br>准备工作和部署到 GitHub 一样。<br>:::</p>
+<ol>
+<li>如果没有账号，请点此前往 <a href="https://github.com">GitHub</a> 注册一个 GitHub 账号。</li>
+<li>新建一个公开仓库，仓库名格式为 <code>your_username.github.io</code> 例如你的 GitHub 用户名是 <code>easyhexo</code>，那么你的仓库地址名称就应该是 <code>easyhexo.github.io</code></li>
+<li>创建完成后记下该仓库的 HTTPS/SSH 地址，一般格式为 <code>https://github.com/your_username/your_reponame.git</code> 在下一步会用到。</li>
+</ol>
+<h3 id="配置-Git-1"><a href="#配置-Git-1" class="headerlink" title="配置 Git"></a>配置 Git</h3><p>:::tip 提醒<br>配置 Git 也和部署到 GitHub 一样。<br>:::</p>
+<p>如果你只是安装好了 Git 但没有配置过你的 Git ，那么现在需要做的第一件事情就是设置你的 Git 用户名和邮箱。<br>在 Git Bash 中执行以下两条命令配置你的用户名和邮箱，这里建议用户名和邮箱与你的 GitHub 用户名和邮箱保持一致。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">"Your_user_name"</span></span><br><span class="line">$ git config --global user.email Your_email@example.com</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>每次 Git 提交时都会附带这两条信息，用于记录是谁提交的更新，并且会随更新内容一起被记录到历史记录中。简单说，是用来标记的你的身份的~</p>
+</blockquote>
+<h3 id="配置本地和远程仓库"><a href="#配置本地和远程仓库" class="headerlink" title="配置本地和远程仓库"></a>配置本地和远程仓库</h3><p>在博客根目录打开终端并执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">":tada: Init repo"</span></span><br><span class="line">git remote add origin git@github.com:你的名字/你的项目名字.git</span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
+
+<p>这样就将你的 Hexo 博客 push 上 GitHub 仓库了。以后更新博客只需要 <code>git push origin master</code> 即可。</p>
+<h2 id="部署到-CentOS-Servers"><a href="#部署到-CentOS-Servers" class="headerlink" title="部署到 CentOS Servers"></a>部署到 CentOS Servers</h2><h3 id="预先准备"><a href="#预先准备" class="headerlink" title="预先准备"></a>预先准备</h3><ul>
+<li>确保你的 PC 已经安装好 Hexo 主程序的并且生成站点文件夹。安装 Hexo，请参阅<a href="/1-Hexo-install-and-config/1-2-install-hexo.html">安装 Hexo</a></li>
+<li>一台搭载 CentOS 7.4 64bit 的 ECS 服务器实例，其他 Linux 系统也可以</li>
+<li>你至少应该掌握一丢丢的 Linux 命令</li>
+</ul>
+<h3 id="安装部署插件-1"><a href="#安装部署插件-1" class="headerlink" title="安装部署插件"></a>安装<a href="https://github.com/hexojs/hexo-deployer-git">部署插件</a></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br><span class="line">$ npm install hexo-server --save</span><br></pre></td></tr></table></figure>
+
+<h3 id="服务器环境配置"><a href="#服务器环境配置" class="headerlink" title="服务器环境配置"></a>服务器环境配置</h3><h4 id="更新服务器的软件包"><a href="#更新服务器的软件包" class="headerlink" title="更新服务器的软件包"></a>更新服务器的软件包</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y update</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装-Git-1"><a href="#安装-Git-1" class="headerlink" title="安装 Git"></a>安装 Git</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install git -y</span><br></pre></td></tr></table></figure>
+
+<h4 id="新建-Git-用户"><a href="#新建-Git-用户" class="headerlink" title="新建 Git 用户"></a>新建 Git 用户</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd -m git</span><br></pre></td></tr></table></figure>
+
+<h4 id="设置-gituser-的密码"><a href="#设置-gituser-的密码" class="headerlink" title="设置 gituser 的密码"></a>设置 gituser 的密码</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">passwd git</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置-SSH-免密登陆"><a href="#配置-SSH-免密登陆" class="headerlink" title="配置 SSH 免密登陆"></a>配置 SSH 免密登陆</h4><p>我们在使用 SSH 访问服务器时每一次连接都需要验证相应用户的密码，十分繁琐，所以我们通过一组密匙来进行授权访问。<br>在 <code>Git Bash</code> 中使用 <code>ssh-keygen</code> 命令在你的电脑上生成一组密匙，这个过程中 <code>ssh-keygen</code> 会确认密钥的存储位置（ Windows 下默认是 <code>c:users/username/.ssh/id_rsa</code>），然后它会要求你输入两次密钥口令。如果你不想在使用密钥时输入口令，将其留空。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>ssh-copy-id -i</code> 命令将公钥也就是 <code>id_rsa.pub</code> 添加到服务器上。这个过程中需要验证你所添加的用户的密码，如果你的服务器上存在多个用户，你需要逐一添加。添加完成后可以通过 <code>ssh your_user_name@HostIP</code> 命令来验证是否添加成功。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-copy-id -i ~/.ssh/id_rsa.pub your_user_name@HostIP  //添加公钥</span><br><span class="line">$ ssh your_user_name@HostIP   //验证是否添加成功</span><br></pre></td></tr></table></figure>
+
+<h4 id="禁止-Git-用户-Shell-登陆权限"><a href="#禁止-Git-用户-Shell-登陆权限" class="headerlink" title="禁止 Git 用户 Shell 登陆权限"></a>禁止 Git 用户 Shell 登陆权限</h4><p>出于安全考虑，禁用 Git 用户的 shell 权限(必须先验证是否可以免密码登陆，可以后再禁用 shell 权限，否则无法通过 <code>ssh-copy-id -i</code> 添加 SSH 公钥)，使用 <code>vim /etc/passwd</code> 命令修改 <code>~/etc/</code> 下的 passwa 文件</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="deletion">-  git:x:1001:1001:,,,:/home/git:/bin/bash</span></span><br><span class="line"><span class="addition">+  git:x:1001:1001:,,,:/home/git:/usr/bin/git-shell</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="SSH-免密登陆无效问题排查"><a href="#SSH-免密登陆无效问题排查" class="headerlink" title="SSH 免密登陆无效问题排查"></a>SSH 免密登陆无效问题排查</h4><p>检查 <code>/etc/ssh/</code> 目录下的 <code>sshd_config</code> 文件，确认以下关键选项是否正常</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">RSAAuthentication</span> <span class="literal">yes</span></span><br><span class="line"><span class="string">PubkeyAuthentication</span> <span class="literal">yes</span></span><br><span class="line"><span class="string">AuthorizedKeysFile</span>      <span class="string">.ssh/authorized_keys</span></span><br><span class="line"><span class="comment">#GSSAPIAuthentication yes</span></span><br><span class="line"><span class="comment">#GSSAPICleanupCredentials yes</span></span><br></pre></td></tr></table></figure>
+
+<p>若还是不能正常工作，则检查用户权限和组权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chmod 0755 /home/your_user_name</span><br><span class="line">chmod 700 /home/your_user_name/.ssh</span><br><span class="line">chmod 600 /home/your_user_name/.ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+
+<p>关于 SSH 的更多问题可查阅<a href="https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/#platform-windows" target="_blank" rel="noopener">这里</a></p>
+<h4 id="初始化-Git-仓库"><a href="#初始化-Git-仓库" class="headerlink" title="初始化 Git 仓库"></a>初始化 Git 仓库</h4><p>新建 <code>/var/repo</code> 目录，并在该目录下，使用 <code>git init --bare</code> 创建一个名为 <code>blog.git</code> 裸仓库，并改变该目录的所有者为 git 用户。</p>
+<blockquote>
+<p>裸仓库可以直接作为服务器仓库供各开发者 push、pull 数据，实现数据共享和同步，不保存文件，只保存历史提交的版本信息。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /var/repo    //新建 var/repo 目录</span><br><span class="line"><span class="built_in">cd</span> /var/repo          //进入该目录</span><br><span class="line">git init --bare blog.git   //新建一个裸仓库</span><br><span class="line">chown -R git:git blog.git</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置-Git-Hooks"><a href="#配置-Git-Hooks" class="headerlink" title="配置 Git Hooks"></a>配置 Git Hooks</h4><p>使用 vim 命令在 <code>/var/repo/blog.git/hooks</code> 目录下创建 <code>post-receive</code> 文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /var/repo/blog.git/hooks/post-receive</span><br></pre></td></tr></table></figure>
+
+<p>并且在 <code>post-receive</code> 文件中写入以下内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line">git --work-tree=/home/www/hexo --git-dir=/var/repo/blog.git checkout -f</span><br></pre></td></tr></table></figure>
+
+<p>提升 <code>post-receive</code> 的可执行权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x /var/repo/blog.git/hooks/post-receive</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装-Nginx"><a href="#安装-Nginx" class="headerlink" title="安装 Nginx"></a>安装 Nginx</h4><blockquote>
+<p>Nginx 是一个高性能的 HTTP 和反向代理服务，也是一个 IMAP/POP3/SMTP 服务。外网用户访问服务器的 Web 服务由 Nginx 提供，Nginx 需要配置静态资源的路径信息才能通过 url 正确访问到服务器上的静态资源。</p>
+</blockquote>
+<p>在安装之前我们先创建用于存放静态资源的目录 <code>/home/www/hexo</code> ，并更改其所有者，稍后将其设置为 Nginx 的默认静态资源目录。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /home/www/hexo      //创建目录</span><br><span class="line">chown -R git:git /home/www/hexo   //更改目录所有者</span><br><span class="line">yum install nginx -y   //安装Nginx</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置静态服务器访问路径"><a href="#配置静态服务器访问路径" class="headerlink" title="配置静态服务器访问路径"></a>配置静态服务器访问路径</h4><p>修改 Nginx 默认静态资源路径，打开 Nginx 的默认配置文件 <code>/etc/nginx/nginx.conf</code> ，将默认的 <code>root /usr/share/nginx/html;</code> 修改为: <code>root /home/www/hexo;</code> 如下所示。</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">    server &#123;</span><br><span class="line">        listen       80 default_server;</span><br><span class="line">        listen       [::]:80 default_server;</span><br><span class="line">        server_name  _;</span><br><span class="line"><span class="deletion">-       root         /data/www;</span></span><br><span class="line"><span class="addition">+       root         /home/www/hexo;</span></span><br><span class="line"></span><br><span class="line">        include /etc/nginx/default.d/*.conf;</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        error_page 404 /404.html;</span><br><span class="line">            location = /40x.html &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        error_page 500 502 503 504 /50x.html;</span><br><span class="line">            location = /50x.html &#123;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果你拥有 <code>SSL,TSL</code> 证书，需要配置 <code>HTTPS</code> 访问或者添加 <code>HTTP</code> 强制转换 <code>HTTPS</code> 访问功能，请参照以下代码进行配置。</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">        <span class="attribute">listen</span>       <span class="number">80</span> default_server;</span><br><span class="line">        <span class="attribute">listen</span>       [::]:<span class="number">80</span> default_server;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">return</span> <span class="number">301</span> https://liujunzhou.top<span class="variable">$request_uri</span>; <span class="comment"># 使用301重定向</span></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># Settings for a TLS enabled server.</span></span><br><span class="line"></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">        <span class="attribute">listen</span>       <span class="number">443</span> ssl http2 default_server;</span><br><span class="line">        <span class="attribute">listen</span>       [::]:<span class="number">443</span> ssl http2 default_server;</span><br><span class="line">        <span class="attribute">server_name</span>  liujunzhou.top; <span class="comment">#你的域名</span></span><br><span class="line">        <span class="attribute">root</span>         /home/www/hexo; <span class="comment"># Nginx 静态资源存放路径</span></span><br><span class="line"></span><br><span class="line">        <span class="attribute">ssl_certificate</span> <span class="string">"/etc/pki/tls/certs/CA.crt"</span>;</span><br><span class="line">        <span class="attribute">ssl_certificate_key</span> <span class="string">"/etc/pki/tls/certs/CA.key"</span>;</span><br><span class="line">        <span class="attribute">ssl_session_cache</span> shared:SSL:<span class="number">1m</span>;</span><br><span class="line">        <span class="attribute">ssl_session_timeout</span>  <span class="number">10m</span>;</span><br><span class="line">        <span class="attribute">ssl_protocols</span> TLSv1 TLSv1.<span class="number">1</span> TLSv1.<span class="number">2</span>; <span class="comment">#按照此协议配置</span></span><br><span class="line">        <span class="attribute">ssl_ciphers</span> ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;<span class="comment">#按照此套件配置</span></span><br><span class="line">        <span class="attribute">ssl_prefer_server_ciphers</span> <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Load configuration files for the default server block.</span></span><br><span class="line">        <span class="attribute">include</span> /etc/nginx/default.d/<span class="regexp">*.conf</span>;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">location</span> / &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">error_page</span> <span class="number">404</span> /<span class="number">404</span>.html;</span><br><span class="line">            <span class="attribute">location</span> = /40x.html &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">error_page</span> <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span> /50x.html;</span><br><span class="line">            <span class="attribute">location</span> = /50x.html &#123;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置-config-yml文件"><a href="#配置-config-yml文件" class="headerlink" title="配置_config.yml文件"></a>配置<code>_config.yml</code>文件</h3><p>在 <code>_config.yml</code> 文件中设置 deploy 选项</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Deployment</span></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">type:</span> <span class="string">git</span> <span class="comment"># 类型填git</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">your_user_name@HostIP:/var/repo/blog.git</span></span><br><span class="line">    <span class="attr">branch:</span> <span class="string">master</span></span><br><span class="line">    <span class="attr">message:</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="发布站点"><a href="#发布站点" class="headerlink" title="发布站点"></a>发布站点</h4><p>在你的 Hexo 站点根目录下，执行如下命令即可发布你的站点到服务器上。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean &amp;&amp; hexo d -g</span><br></pre></td></tr></table></figure>
+
+<h2 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h2><h3 id="Hooks-失效"><a href="#Hooks-失效" class="headerlink" title="Hooks 失效"></a>Hooks 失效</h3><p>如果部署成功，但是 <code>/home/www/hexo</code> 目录的资源文件并未更新，请检查 <code>post-receive</code> 是否有执行权限，以及 <code>/home/www/hexo</code> 文件所有者是否为 Git 用户，以及是否具有读写权限。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chown -R git:git /var/repo/blog.git  //更改blog.git目录的所有者</span><br><span class="line">chmod +x /var/repo/blog.git/hooks/post-receive   //提升post-receive执行权</span><br><span class="line">chown -R git:git /home/www/hexo   //或者chmod 755 /home/www/hexo 确保hexo文件夹为空</span><br></pre></td></tr></table></figure>
+
+<h3 id="部署后，部分页面-404"><a href="#部署后，部分页面-404" class="headerlink" title="部署后，部分页面 404"></a>部署后，部分页面 404</h3><p>部分情况下，在初次部署之后，部分文章或者页面路径大小如果更改了，会导致新部署上去的页面出现 404 错误。<br>这是由于 Git 没有区分大小写导致的文件路径错误。修改 <code>hexo根目录/.deploy_git/.git/</code> 下的 <code>config</code> 文件</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[core]</span><br><span class="line">	repositoryformatversion = 0</span><br><span class="line">	filemode = false</span><br><span class="line">	bare = false</span><br><span class="line">	logallrefupdates = false</span><br><span class="line">	symlinks = false</span><br><span class="line"><span class="deletion">-	ignorecase = true</span></span><br><span class="line"><span class="addition">+   ignorecase = false</span></span><br><span class="line">[branch "master"]</span><br><span class="line">	remote = ueser_name@HostIP:/var/repo/blog.git</span><br><span class="line">	merge = refs/heads/master</span><br></pre></td></tr></table></figure>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Xtyuerx</span>
+                    </p>
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/es6/class/">class</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Xtyuerx | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
