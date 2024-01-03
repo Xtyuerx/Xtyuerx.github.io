@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Xtyuerx">
+
+
+    <meta name="subtitle" content="格物致知">
+
+
+
+
+<title>Javascript 执行过程深究 | Xtyuerx`s blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Xtyuerx&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Xtyuerx&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Javascript 执行过程深究</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Xtyuerx</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">三月 1, 2020&nbsp;&nbsp;11:25:02</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/JavaScript/">JavaScript</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="js-引擎的执行过程"><a href="#js-引擎的执行过程" class="headerlink" title="js 引擎的执行过程"></a>js 引擎的执行过程</h1><ul>
+<li>javascript 是单线程语言<blockquote>
+<p>在浏览器中一个页面永远只有一个线程在执行 js 脚本代码（在不主动开启新线程的情况下）。</p>
+</blockquote>
+</li>
+<li>javascript 是单线程语言,但是代码解析却十分的快速，不会发生解析阻塞。<blockquote>
+<p>javascript 是异步执行的，通过事件循环（Event Loop）的方式实现。</p>
+</blockquote>
+</li>
+</ul>
+<p>js 引擎执行过程分为三个阶段</p>
+<h2 id="词法分析和语法分析"><a href="#词法分析和语法分析" class="headerlink" title="词法分析和语法分析"></a>词法分析和语法分析</h2><h3 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h3><p>Lexical Analysis，从左向右逐行扫描源程序的字符，将单个字符还原为原来的单词，并确定单词的的类型，例如该单词是属于标识符，关键字，运算符，还是具体的数据（数字，true，false，字符串等）；最终输出一串单词序列 tokens，包含单词和它们对应的类型。</p>
+<h3 id="语法分析"><a href="#语法分析" class="headerlink" title="语法分析"></a>语法分析</h3><p>Syntax Analysis，从词法分析输出的 tokens 进行遍历，把一个个单词组成源程序的语句块，并构造语法分析树 AST。</p>
+<blockquote>
+<p>js 脚本代码块加载完毕后，会首先进入语法分析阶段。该阶段主要作用是：<br>分析该 js 脚本代码块的语法是否正确，如果出现不正确，则向外抛出一个<strong>语法错误（SyntaxError）</strong>，停止该 js 代码块的执行，然后继续查找并加载下一个代码块；如果语法正确，则进入预编译阶段</p>
+</blockquote>
+<h3 id="AST"><a href="#AST" class="headerlink" title="AST"></a>AST</h3><p>AST：Abstract Syntax Tree，抽象语法树，抽象语法树描述语句的语法结构，它是一种类似于 JSON 的对象结构，包含语句中各个单词的类别，以及语句执行的顺序等。解释器会根据 AST 的顺序从上往下遍历进行执行，所以在 JS 里 AST 显示的顺序就是 JS 的执行顺序。例如 i = a + b * 10 形成的 AST：</p>
+<a href="/images/image-ast.png" target="_blank">
+<img src="/images/image-ast.png" alt="/images/image-ast.png" />
+</a>
+
+<p>关于 AST 的应用，已知的有以下这些：</p>
+<ul>
+<li>ESLint：根据源代码生成 AST，然后检查代码问题</li>
+<li>Babel：将 ES6+的 JS 源代码解析成 AST 之后，再根据 AST 生成低版本的 JS 代码</li>
+<li>Webpack：webpack 的部分 loader 需要将源代码解析成 AST 来分析，或者提供给 plugin 来使用</li>
+</ul>
+<h2 id="预编译阶段"><a href="#预编译阶段" class="headerlink" title="预编译阶段"></a>预编译阶段</h2><p>js 代码块通过语法分析阶段后，语法正确则进入预编译阶段。在分析预编译阶段之前，我们先了解一下 js 的运行环境，运行环境主要有三种：</p>
+<ul>
+<li><strong>全局环境</strong>（JS 代码加载完毕后，进入代码预编译即进入全局环境）</li>
+<li><strong>函数环境</strong>（函数调用执行时，进入该函数环境，不同的函数则函数环境不同）</li>
+<li><strong>eval</strong>（不建议使用，会有安全，性能等问题）</li>
+</ul>
+<blockquote>
+<p>每进入一个不同的运行环境都会创建一个相应的<strong>执行上下文（Execution Context）</strong>，那么在一段 JS 程序中一般都会创建多个执行上下文，js 引擎会以栈的方式对这些执行上下文进行处理，形成<strong>函数调用栈（call stack）</strong>，栈底永远是全局执行上下文（Global Execution Context），栈顶则永远是当前执行上下文。</p>
+</blockquote>
+<h3 id="函数调用栈"><a href="#函数调用栈" class="headerlink" title="函数调用栈"></a>函数调用栈</h3><blockquote>
+<p>函数调用栈就是使用栈存取的方式进行管理运行环境，特点是先进后出，后进先出。</p>
+</blockquote>
+<a href="/images/stack.png" target="_blank">
+  <img src="/images/stack.png" alt="/images/stack.png" />
+</a>
+
+<ol>
+<li>首先进入全局环境，创建全局执行上下文（Global Execution Context），推入 stack 栈中</li>
+<li>调用 bar 函数，进入 bar 函数运行环境，创建 bar 函数执行上下文（bar Execution Context），推入 stack 栈中</li>
+<li>在 bar 函数内部调用 foo 函数，则再进入 foo 函数运行环境，创建 foo 函数执行上下文（foo Execution Context），推入 stack 栈中</li>
+<li>此刻栈底是全局执行上下文（Global Execution Context），栈顶是 foo 函数执行上下文（foo Execution Context），如上 5 图，由于 foo 函数内部没有再调用其他函数，那么则开始出栈</li>
+<li>foo 函数执行完毕后，栈顶 foo 函数执行上下文（foo Execution Context）首先出栈</li>
+<li>bar 函数执行完毕，bar 函数执行上下文（bar Execution Context）出栈</li>
+<li>Global Execution Context 则在浏览器或者该标签页关闭时出栈。</li>
+</ol>
+<h3 id="创建执行上下文"><a href="#创建执行上下文" class="headerlink" title="创建执行上下文"></a>创建执行上下文</h3><ol>
+<li><p>创建变量对象<br>创建变量对象主要经过以下几个过程，如图：</p>
+<a href="/images/stack.png" target="_blank">
+<img src="/images/stack.png" alt="/images/stack.png" />
+</a>
+1. 创建 arguments 对象，检查当前上下文中的参数，建立该对象的属性与属性值，仅在函数环境(非箭头函数)中进行，全局环境没有此过程
+2. 检查当前上下文的函数声明，按代码顺序查找，将找到的函数提前声明，如果当前上下文的变量对象没有该函数名属性，则在该变量对象以函数名建立一个属性，属性值则为指向该函数所在堆内存地址的引用，如果存在，则会被新的引用覆盖。
+3. 检查当前上下文的变量声明，按代码顺序查找，将找到的变量提前声明，如果当前上下文的变量对象没有该变量名属性，则在该变量对象以变量名建立一个属性，属性值为 undefined；如果存在，则忽略该变量声明
+   > 注：在全局环境中，window 对象就是全局执行上下文的变量对象，所有的变量和函数都是 window 对象的属性方法。
+   所以函数声明提前和变量声明提升是在创建变量对象中进行的，且函数声明优先级高于变量声明。
+
+<p>   我们分析一段简单的代码，帮助我们理解该过程，如下：</p>
+   <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fun</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> num = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(num);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fun(<span class="number">2</span>, <span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+<p>   这里我们在全局环境调用fun函数，创建fun执行上下文，这里为了方便大家理解，暂时不讲解作用域链以及this指向，如下：</p>
+   <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">funEC = &#123;</span><br><span class="line">    <span class="comment">//变量对象</span></span><br><span class="line">    VO: &#123;</span><br><span class="line">        <span class="comment">//arguments对象</span></span><br><span class="line">        <span class="built_in">arguments</span>: &#123;</span><br><span class="line">            a: <span class="literal">undefined</span>,</span><br><span class="line">            b: <span class="literal">undefined</span>,</span><br><span class="line">            length: <span class="number">2</span></span><br><span class="line">        &#125;,</span><br><span class="line"></span><br><span class="line">        <span class="comment">//test函数</span></span><br><span class="line">        test: <span class="xml"><span class="tag">&lt;<span class="name">test</span> <span class="attr">reference</span>&gt;</span>, </span></span><br><span class="line"></span><br><span class="line"><span class="xml">        //num变量</span></span><br><span class="line"><span class="xml">        num: undefined</span></span><br><span class="line"><span class="xml">    &#125;,</span></span><br><span class="line"></span><br><span class="line"><span class="xml">    //作用域链</span></span><br><span class="line"><span class="xml">    scopeChain:[],</span></span><br><span class="line"></span><br><span class="line"><span class="xml">    //this指向</span></span><br><span class="line"><span class="xml">    this: window</span></span><br><span class="line"><span class="xml">&#125;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>funEC表示fun函数的执行上下文（fun Execution Context简写为funEC）</p>
+</li>
+<li><p>funE的变量对象中arguments属性，上面的写法仅为了方便大家理解，但是在浏览器中展示是以类数组的方式展示的</p>
+</li>
+<li><p><code>&lt;test reference&gt;</code>表示test函数在堆内存地址的引用</p>
+<blockquote>
+<p>注：创建变量对象发生在预编译阶段，但尚未进入执行阶段，该变量对象都是不能访问的，因为此时的变量对象中的变量属性尚未赋值，值仍为undefined，只有进入执行阶段，变量对象中的变量属性进行赋值后，变量对象（Variable Object）转为活动对象（Active Object）后，才能进行访问，这个过程就是VO –&gt; AO过程。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>建立作用域链<br><strong>作用域链由当前执行环境的变量对象（未进入执行阶段前）与上层环境的一系列活动对象组成，它保证了当前执行环境对符合访问权限的变量和函数的有序访问。</strong><br>理清作用域链可以帮助我们理解js很多问题包括闭包问题等，下面我们结合一个简单的例子来理解作用域链，如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num = <span class="number">30</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">innerTest</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">var</span> b = <span class="number">20</span>;</span><br><span class="line">      <span class="keyword">return</span> a + b</span><br><span class="line">    &#125;</span><br><span class="line">    innerTest()</span><br><span class="line">&#125;</span><br><span class="line">test()</span><br></pre></td></tr></table></figure>
+<p>在上面的例子中，当执行到调用innerTest函数，进入innerTest函数环境。全局执行上下文和test函数执行上下文已进入执行阶段，innerTest函数执行上下文在预编译阶段创建变量对象，所以他们的活动对象和变量对象分别是AO(global)，AO(test)和VO(innerTest)，而innerTest的作用域链由当前执行环境的变量对象（未进入执行阶段前）与上层环境的一系列活动对象组成，如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">innerTestEC = &#123;</span><br><span class="line">  <span class="comment">//变量对象</span></span><br><span class="line">  VO: &#123;<span class="attr">b</span>: <span class="literal">undefined</span>&#125;, </span><br><span class="line"></span><br><span class="line">  <span class="comment">//作用域链</span></span><br><span class="line">  scopeChain: [VO(innerTest), AO(test), AO(global)],</span><br><span class="line">  </span><br><span class="line">  <span class="comment">//this指向</span></span><br><span class="line">  <span class="keyword">this</span>: <span class="built_in">window</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们这里直接使用数组表示作用域链，作用域链的活动对象或变量对象可以直接理解为作用域。</p>
+<ul>
+<li>作用域链的第一项永远是当前作用域（当前上下文的变量对象或活动对象）；</li>
+<li>最后一项永远是全局作用域（全局执行上下文的活动对象）；</li>
+<li>作用域链保证了变量和函数的有序访问，查找方式是沿着作用域链从左至右查找变量或函数，找到则会停止查找，找不到则一直查找到全局作用域，再找不到则会抛出引用错误。</li>
+</ul>
+</li>
+<li><p>确定 this 指向<br>在全局环境下，全局执行上下文中变量对象的this属性指向为window；函数环境下的this指向却较为灵活，需根据执行环境和执行方法确定，需要举大量的典型例子概括，本文先不做分析。</p>
+</li>
+</ol>
+<p>总结：永远只有JS引擎线程在执行JS脚本程序，其他三个线程只负责将满足触发条件的处理函数推进事件队列，等待JS引擎线程执行。</p>
+<p>》注：浏览器首先按顺序加载由<code>&lt;script&gt;</code>标签分割的 js 代码块，加载 js 代码块完毕后，立刻进入以上三个阶段，然后再按顺序查找下一个代码块，再继续执行以上三个阶段，无论是外部脚本文件（不异步加载）还是内部脚本代码块，都是一样的原理，并且都在同一个全局作用域中。</p>
+<h2 id="执行阶段"><a href="#执行阶段" class="headerlink" title="执行阶段"></a>执行阶段</h2><p>在分析之前我们先思考以下两个问题：</p>
+<blockquote>
+<p>Q: js是单线程的，为了避免代码解析阻塞使用了异步执行，那么它的异步执行机制是怎么样的？</p>
+</blockquote>
+<p>A: 通过事件循环（Event Loop），理解了事件循环的原理就理解了js的异步执行机制</p>
+<blockquote>
+<p>Q: js是单线程的，那么是否代表参与js执行过程的线程就只有一个？</p>
+</blockquote>
+<p>A:不是的，会有四个线程参与该过程，但是永远只有JS引擎线程在执行JS脚本程序，其他的三个线程只协助，不参与代码解析与执行。参与js执行过程的线程分别是：</p>
+<ul>
+<li><strong>JS引擎线程：</strong> 也称为JS内核，负责解析执行Javascript脚本程序的主线程（例如V8引擎）</li>
+<li><strong>事件触发线程：</strong> 归属于浏览器内核进程，不受JS引擎线程控制。主要用于控制事件（例如鼠标，键盘等事件），当该事件被触发时候，事件触发线程就会把该事件的处理函数推进事件队列，等待JS引擎线程执行</li>
+<li><strong>定时器触发线程：</strong> 主要控制计时器setInterval和延时器setTimeout，用于定时器的计时，计时完毕，满足定时器的触发条件，则将定时器的处理函数推进事件队列中，等待JS引擎线程执行。<br><strong>*W3C在HTML标准中规定setTimeout低于4ms的时间间隔算为4ms。</strong></li>
+<li><strong>HTTP异步请求线程：</strong> 通过XMLHttpRequest连接后，通过浏览器新开的一个线程，监控readyState状态变更时，如果设置了该状态的回调函数，则将该状态的处理函数推进事件队列中，等待JS引擎线程执行。<br><strong>*浏览器对通一域名请求的并发连接数是有限制的，Chrome和Firefox限制数为6个，ie8则为10个。</strong></li>
+</ul>
+<p>举一个简单的栗子</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">'script start'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 宏任务</span></span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'setTimeout'</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 微任务</span></span><br><span class="line"><span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'promise1'</span>);</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'promise2'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'script end'</span>);</span><br></pre></td></tr></table></figure>
+<p>在JS引擎执行过程中，进入执行阶段后，代码的执行顺序如下：</p>
+<blockquote>
+<p>主线程 –&gt; 微任务 –&gt; 宏任务(异步任务)</p>
+</blockquote>
+<p>输出结果为：</p>
+<ul>
+<li>script start</li>
+<li>script end</li>
+<li>promise1</li>
+<li>promise2</li>
+<li>setTimeout</li>
+</ul>
+<p>进入ES6或Node环境中，JS的任务分为两种，分别是<strong>宏任务（macro-task）</strong>和<strong>微任务（micro-task）</strong>，在最新的ECMAScript中，微任务称为jobs，宏任务称为task，他们的执行顺序如上。可能很多人对上面的分析并不理解，那么我们接下来继续对上面例子进行详细分析。</p>
+<h3 id="宏任务"><a href="#宏任务" class="headerlink" title="宏任务"></a>宏任务</h3><p>宏任务（macro-task）可分为<strong>同步任务</strong>和<strong>异步任务</strong>：</p>
+<ul>
+<li>同步任务指的是在JS引擎主线程上按顺序执行的任务，只有前一个任务执行完毕后，才能执行后一个任务，形成一个执行栈（函数调用栈）。</li>
+<li>异步任务指的是不直接进入JS引擎主线程，而是满足触发条件时，相关的线程将该异步任务推进<strong>任务队列(task queue)</strong>，等待JS引擎主线程上的任务执行完毕，空闲时读取执行的任务，例如异步Ajax，DOM事件，setTimeout等。</li>
+</ul>
+<p>理解宏任务中同步任务和异步任务的执行顺序，那么就相当于理解了JS异步执行机制–事件循环（Event Loop）。</p>
+<h3 id="事件循环"><a href="#事件循环" class="headerlink" title="事件循环"></a>事件循环</h3><p>事件循环可以理解成由三部分组成，分别是：</p>
+<ul>
+<li><strong>主线程执行栈</strong></li>
+<li><strong>异步任务等待触发</strong></li>
+<li><strong>任务队列</strong></li>
+</ul>
+<p><strong>任务队列(task queue)就是以队列的数据结构对事件任务进行管理，特点是先进先出，后进后出。</strong></p>
+<p>这里直接引用一张著名的图片(参考自Philip Roberts的演讲《Help, I’m stuck in an event-loop》)，帮助我们理解，如下：<br><a href="/images/Event Loop.jpg" target="_blank"><br>  <img src="/images/Event Loop.jpg" alt="Event Loop" /><br></a></p>
+<p>在JS引擎主线程执行过程中：</p>
+<ul>
+<li>首先执行主线程的同步代码，在主线程上形成一个执行栈，可理解为函数调用栈；</li>
+<li>当执行栈中的函数调用到一些异步执行的API（例如异步Ajax，DOM事件，setTimeout等API），则会开启对应的线程（Http异步请求线程，事件触发线程和定时器触发线程）进行监控和控制</li>
+<li>当异步任务的事件满足触发条件时，对应的线程则会把该事件的处理函数推进任务队列(task queue)中，等待主线程读取执行</li>
+<li>当JS引擎主线程上的任务执行完毕，则会读取任务队列中的事件，将任务队列中的事件任务推进主线程中，按任务队列顺序执行</li>
+<li>当JS引擎主线程上的任务执行完毕后，则会再次读取任务队列中的事件任务，如此循环，这就是事件循环（Event Loop）的过程</li>
+</ul>
+<p>如果还是不能理解，那么我们再次拿上面的例子进行详细分析，该例子中宏任务的代码部分是：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">'script start'</span>);</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'setTimeout'</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'script end'</span>);</span><br></pre></td></tr></table></figure>
+<p>代码执行过程如下：</p>
+<ol>
+<li>JS引擎主线程按代码顺序执行，当执行到console.log(‘script start’);，JS引擎主线程认为该任务是同步任务，所以立刻执行输出script start，然后继续向下执行；</li>
+<li>JS引擎主线程执行到setTimeout(function() { console.log(‘setTimeout’); }, 0);，JS引擎主线程认为setTimeout是异步任务API，则向浏览器内核进程申请开启定时器线程进行计时和控制该setTimeout任务。由于W3C在HTML标准中规定setTimeout低于4ms的时间间隔算为4ms，那么当计时到4ms时，定时器线程就把该回调处理函数推进任务队列中等待主线程执行，然后JS引擎主线程继续向下执行</li>
+<li>JS引擎主线程执行到console.log(‘script end’);，JS引擎主线程认为该任务是同步任务，所以立刻执行输出script end</li>
+<li>JS引擎主线程上的任务执行完毕（输出script start和script end）后，主线程空闲，则开始读取任务队列中的事件任务，将该任务队里的事件任务推进主线程中，按任务队列顺序执行，最终输出setTimeout，所以输出的结果顺序为script start script end setTimeout</li>
+</ol>
+<p>以上便是JS引擎执行宏任务的整个过程。</p>
+<p>理解该过程后，我们做一些拓展性的思考：</p>
+<blockquote>
+<p>我们都知道setTimeout和setInterval是异步任务的定时器，需要添加到任务队列等待主线程执行，那么使用setTimeout模拟实现setInterval，会有区别吗？</p>
+</blockquote>
+<p>答案是有区别的，我们不妨思考一下：</p>
+<ul>
+<li>setTimeout实现setInterval只能通过递归调用</li>
+<li>setTimeout是在到了指定时间的时候就把事件推到任务队列中，只有当在任务队列中的setTimeout事件被主线程执行后，才会继续再次在到了指定时间的时候把事件推到任务队列，那么setTimeout的事件执行肯定比指定的时间要久，具体相差多少跟代码执行时间有关</li>
+<li>setInterval则是每次都精确的隔一段时间就向任务队列推入一个事件，无论上一个setInterval事件是否已经执行，所以有可能存在setInterval的事件任务累积，导致setInterval的代码重复连续执行多次，影响页面性能。</li>
+</ul>
+<p>综合以上的分析，使用setTimeout实现计时功能是比setInterval性能更好的。当然如果不需要兼容低版本的IE浏览器，使用requestAnimationFrame是更好的选择。</p>
+<h3 id="微任务"><a href="#微任务" class="headerlink" title="微任务"></a>微任务</h3><p>微任务是在es6和node环境中出现的一个任务类型，如果不考虑es6和node环境的话，我们只需要理解宏任务事件循环的执行过程就已经足够了，但是到了es6和node环境，我们就需要理解微任务的执行顺序了。<br><strong>微任务（micro-task）的API主要有:Promise， process.nextTick</strong><br>这里我们直接引用一张流程图帮助我们理解，如下：<br>在宏任务中执行的任务有两种，分别是同步任务和异步任务，因为异步任务会在满足触发条件时才会推进任务队列（task queue），然后等待主线程上的任务执行完毕，再读取任务队列中的任务事件，最后推进主线程执行，所以这里将异步任务即任务队列看作是新的宏任务。执行的过程如上图所示：</p>
+<ol>
+<li>执行宏任务中<strong>同步任务</strong>，执行结束；</li>
+<li>检查是否存在可执行的<strong>微任务</strong>，有的话执行所有微任务，然后读取任务队列的任务事件，推进主线程形成新的宏任务；没有的话则读取任务队列的任务事件，推进主线程形成新的宏任务</li>
+<li>执行<strong>新宏任务</strong>的事件任务，再检查是否存在可执行的微任务，如此不断的重复循环</li>
+</ol>
+<p><strong>*宏任务队列和微任务队列是独立的两块任务队列</strong></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Xtyuerx</span>
+                    </p>
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E5%89%8D%E7%AB%AF/"># 前端</a>
+                    
+                        <a href="/tags/JavaScript/"># JavaScript</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/Tools/debounce/">防抖函数 debounce</a>
+            
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Xtyuerx | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

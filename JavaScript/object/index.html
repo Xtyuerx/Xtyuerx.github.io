@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Xtyuerx">
+
+
+    <meta name="subtitle" content="格物致知">
+
+
+
+
+<title>面向对象和原型 | Xtyuerx`s blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Xtyuerx&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Xtyuerx&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">面向对象和原型</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Xtyuerx</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">四月 21, 2021&nbsp;&nbsp;18:40:12</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/JavaScript/">JavaScript</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <blockquote>
+<p>JavaScript 面向对象的实质是基于原型的对象系统，而不是基于类。</p>
+</blockquote>
+<h1 id="实现-new-关键字"><a href="#实现-new-关键字" class="headerlink" title="实现 new 关键字"></a>实现 new 关键字</h1><ol>
+<li>首先创建一个空对象，这个对象将会作为执行构造函数之后返回的对象实例。</li>
+<li>将上面创建的空对象的隐式原型（__proto__）指向构造函数的原型对象 prototype 属性。</li>
+<li>将这个空对象赋值给构造函数内部的this，并执行构造函数逻辑。</li>
+<li>根据构造函数执行逻辑，返回第一步创建的对象或构造函数的显示返回值。</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name = name</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> person = newFunc(Person, <span class="string">'Lucas'</span>)</span><br><span class="line"><span class="built_in">console</span>.log(person)</span><br><span class="line"><span class="comment">// &#123; name: "lucus" &#125;</span></span><br></pre></td></tr></table></figure>
+<p>根据预期的使用方式，实现newFunc，代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">newFunc</span>(<span class="params">...args</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 取出args第一个参数，即目标构造函数</span></span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">constructor</span> = args.shift()</span><br><span class="line">  // 创建一个空对象，且使这个空对象继承构造函数的prototype属性</span><br><span class="line">  // 即实现 obj.__proto__ === <span class="keyword">constructor</span>.prototype</span><br><span class="line">  const obj = Object.create(<span class="keyword">constructor</span>.prototype)</span><br><span class="line">  // 执行构造函数，得到构造函数返回的结果</span><br><span class="line">  // 这里使用apply使构造函数内的this指向obj</span><br><span class="line">  const result = <span class="keyword">constructor</span>.apply(obj, args)</span><br><span class="line">  // 如果构造函数执行后，返回结果是对象类型，则直接将该结果返回，否则返回这个新对象</span><br><span class="line">  return (typeof result === 'object' &amp;&amp; result != null) ? result : obj</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码涉及到几个关键点：</p>
+<ul>
+<li>使用 Object.create 使 obj 的 __proto__ 指向构造函数的原型。</li>
+<li>使用 apply 方法是构造函数内的this指向 obj。</li>
+<li>在 newFunc 返回时，判断返回结果</li>
+</ul>
+<h1 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h1><h2 id="ES5中相对可用的继承方案"><a href="#ES5中相对可用的继承方案" class="headerlink" title="ES5中相对可用的继承方案"></a>ES5中相对可用的继承方案</h2><p>如果想使 Child 继承 Parent，那么通过原型链实现继承最关键的要点如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Child.prototype = <span class="keyword">new</span> Parent()</span><br></pre></td></tr></table></figure>
+<p>在这样的实现中，不同的 Child 实例的 __proto__ 会引用同一个 Parent 的实例。</p>
+<p>构造函数实现继承的要点如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span>(<span class="params">args</span>) </span>&#123;</span><br><span class="line">  Parent.call(<span class="keyword">this</span>, args)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>暴露问题：仅实现了实例属性继承，Parent 原型的方法在Child实例中并不可用。</p>
+</blockquote>
+<p>解决方案：组合式继承 ↓</p>
+<p>组合式继承：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span>(<span class="params">arg1, arg2</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">this</span>.arg2 = arg2</span><br><span class="line">  Parent.call(<span class="keyword">this</span>, arg1, arg2)</span><br><span class="line">&#125;</span><br><span class="line">Child.prototype = <span class="keyword">new</span> Parent()</span><br><span class="line">Child.prototype.constructor = Child</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>暴露问题：Child 实例中会存在 Parent 的实例属性，这是因为我们在 Child 构造函数中执行了 Parent 构造函数。同时，Child.__proto__ 中也会存在同样的 Parent 的实例属性，且所有的 Child 实例对象的 __proto__ 都指向同一内存地址。</p>
+</blockquote>
+<p>解决方案 ↓</p>
+<p>综上，一个比较完整的实现如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">inherit</span>(<span class="params">Child, Parent</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 继承原型上的属性</span></span><br><span class="line">  Child.prototype = <span class="built_in">Object</span>.create(Parent.prototype)</span><br><span class="line">  <span class="comment">// 修复 constructor</span></span><br><span class="line">  Child.prototype.constructor = Child</span><br><span class="line">  <span class="comment">// 存储超类</span></span><br><span class="line">  Child.super = Parent</span><br><span class="line">  <span class="comment">// 静态属性继承</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Object</span>.setPrototypeOf <span class="comment">/** es6 */</span>) &#123;</span><br><span class="line">    <span class="built_in">Object</span>.setPrototypeOf(Child, Parent)</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (Child.__proto__) &#123;</span><br><span class="line">    Child.__proto__ = Parent</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 兼容IE10等旧版本浏览器</span></span><br><span class="line">    <span class="comment">// 将 Parent 上的静态属性和方法拷贝一份到 Child 上，但不会覆盖 Child 上的所有方法</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> k <span class="keyword">in</span> Parent) &#123;</span><br><span class="line">      <span class="keyword">if</span> (Parent.hasOwnprototype(k) &amp;&amp; !(k <span class="keyword">in</span> Child)) &#123;</span><br><span class="line">        Child[k] = Parent[k]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Xtyuerx</span>
+                    </p>
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E5%89%8D%E7%AB%AF/"># 前端</a>
+                    
+                        <a href="/tags/JavaScript/"># JavaScript</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/%E7%AE%97%E6%B3%95/sort/">排序算法</a>
+            
+            
+            <a class="next" rel="next" href="/es6/class/">class</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Xtyuerx | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
