@@ -253,7 +253,7 @@
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/JavaScript/">JavaScript</a>
+                                <a href="/categories/JavaScript%E5%9F%BA%E7%A1%80/">JavaScript基础</a>
                             
                         </span>
                     
@@ -294,8 +294,8 @@
 <blockquote>
 <p>暴露问题：Child 实例中会存在 Parent 的实例属性，这是因为我们在 Child 构造函数中执行了 Parent 构造函数。同时，Child.__proto__ 中也会存在同样的 Parent 的实例属性，且所有的 Child 实例对象的 __proto__ 都指向同一内存地址。</p>
 </blockquote>
+<p>综上，一个比较完整的实现如下。</p>
 <p>解决方案 ↓</p>
-<p>综上，一个比较完整的实现如下</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">inherit</span>(<span class="params">Child, Parent</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 继承原型上的属性</span></span><br><span class="line">  Child.prototype = <span class="built_in">Object</span>.create(Parent.prototype)</span><br><span class="line">  <span class="comment">// 修复 constructor</span></span><br><span class="line">  Child.prototype.constructor = Child</span><br><span class="line">  <span class="comment">// 存储超类</span></span><br><span class="line">  Child.super = Parent</span><br><span class="line">  <span class="comment">// 静态属性继承</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Object</span>.setPrototypeOf <span class="comment">/** es6 */</span>) &#123;</span><br><span class="line">    <span class="built_in">Object</span>.setPrototypeOf(Child, Parent)</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (Child.__proto__) &#123;</span><br><span class="line">    Child.__proto__ = Parent</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 兼容IE10等旧版本浏览器</span></span><br><span class="line">    <span class="comment">// 将 Parent 上的静态属性和方法拷贝一份到 Child 上，但不会覆盖 Child 上的所有方法</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> k <span class="keyword">in</span> Parent) &#123;</span><br><span class="line">      <span class="keyword">if</span> (Parent.hasOwnprototype(k) &amp;&amp; !(k <span class="keyword">in</span> Child)) &#123;</span><br><span class="line">        Child[k] = Parent[k]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
         </div>
 
@@ -318,8 +318,6 @@
                 <span>Tag(s):</span>
                 <span class="tag">
                     
-                    
-                        <a href="/tags/%E5%89%8D%E7%AB%AF/"># 前端</a>
                     
                         <a href="/tags/JavaScript/"># JavaScript</a>
                     
